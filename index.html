@@ -1,0 +1,323 @@
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Star Wars Store</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap");
+
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: "Orbitron", sans-serif; background-color: #000; color: #fff; overflow-x: hidden; cursor: none; }
+
+    .red-cursor {
+      position: fixed; top: 0; left: 0; width: 25px; height: 25px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,0,0,0.9) 0%, rgba(255,0,0,0.3) 60%, transparent 100%);
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.8), 0 0 30px rgba(255, 0, 0, 0.6);
+      pointer-events: none; transform: translate(-50%, -50%);
+      transition: transform 0.07s linear, box-shadow 0.3s ease; z-index: 9999;
+    }
+    .red-cursor.active { box-shadow: 0 0 25px rgba(255,0,0,1), 0 0 45px rgba(255,0,0,0.8); transform: translate(-50%, -50%) scale(1.2); }
+
+    header { background: linear-gradient(to right, #000, #111, #000); text-align: center; padding: 20px 10px; border-bottom: 2px solid #ffe81f; }
+    header h1 { color: #ffe81f; font-size: 2.5em; letter-spacing: 3px; }
+    nav { background-color: #111; display: flex; justify-content: center; padding: 10px; position: sticky; top: 0; z-index: 100; }
+    nav a { color: #ffe81f; text-decoration: none; margin: 0 15px; transition: 0.3s; }
+    nav a:hover { color: white; }
+
+    .hero { text-align: center; padding: 10px 10px; background: url("YOUR_HERO_IMAGE.jpg") center/cover no-repeat; min-height: 250px; display: flex; align-items: center; justify-content: center; }
+    .hero h2 { background: rgba(0, 0, 0, 0.7); display: inline-block; padding: 15px 30px; color: #ffe81f; font-size: 2em; border-radius: 10px; }
+
+    .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 40px 20px; }
+    .product { position: relative; background: #111; border: 1px solid #333; border-radius: 10px; text-align: center; padding: 20px; transition: transform 0.3s, box-shadow 0.3s; overflow: hidden; }
+    .product:hover { transform: scale(1.05); box-shadow: 0 0 15px #ffe81f; }
+    .product img { width: 100%; height: 250px; object-fit: cover; border-radius: 10px; background: #222; }
+    .product h3 { color: #ffe81f; margin: 10px 0; }
+    .product p { font-size: 14px; color: #ccc; }
+    .price { font-size: 18px; color: #ffe81f; margin: 10px 0; }
+    .btn { background-color: #ffe81f; color: #000; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+    .btn:hover { background-color: #fff; }
+    .more-btn { position: absolute; top: 10px; right: 15px; font-size: 20px; color: #ffe81f; cursor: pointer; transition: 0.3s; }
+    .more-btn:hover { color: #fff; transform: scale(1.2); }
+    .details { background: rgba(255, 255, 255, 0.05); padding: 0 10px; border-radius: 8px; margin-top: 10px; font-size: 13px; color: #ccc; max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.5s ease, opacity 0.4s ease, padding 0.4s ease; }
+    .details.open { padding: 10px; max-height: 200px; opacity: 1; }
+
+    #about { padding: 50px 20px; background-color: #0a0a0a; text-align: center; border-top: 2px solid #ffe81f; }
+    #about h2 { color: #ffe81f; margin-bottom: 20px; }
+    #about p { max-width: 800px; margin: 0 auto; font-size: 16px; color: #ccc; line-height: 1.6; }
+
+    footer { text-align: center; background: #111; padding: 20px; border-top: 2px solid #ffe81f; font-size: 14px; color: #aaa; }
+    footer a { color: #ffe81f; text-decoration: none; margin: 0 10px; }
+    footer a:hover { text-decoration: underline; }
+
+    .cart { position: fixed; right: 20px; bottom: 20px; background: rgba(0,0,0,0.9); border: 2px solid #ffe81f; padding: 15px 20px; border-radius: 10px; box-shadow: 0 0 10px #ffe81f; color: #ffe81f; cursor: pointer; z-index: 10; }
+    .cart-window { position: fixed; right: 20px; bottom: 80px; width: 320px; background: #111; border: 2px solid #ffe81f; border-radius: 10px; display: none; padding: 20px; z-index: 11; }
+    .cart-window h3 { text-align: center; color: #ffe81f; }
+    .cart-items { max-height: 220px; overflow-y: auto; margin-bottom: 10px; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; margin: 5px 0; border-bottom: 1px solid #333; padding-bottom: 5px; }
+    .remove-btn { background: none; border: none; color: #ff4444; font-size: 18px; cursor: pointer; margin-left: 8px; transition: 0.3s; }
+    .remove-btn:hover { color: #ff7777; transform: scale(1.2); }
+    .close-cart { background: #ffe81f; color: #000; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
+    .close-cart:hover { background: white; }
+
+    .order-btn {
+      background-color: #00ff00; color: #000; border: none; padding: 10px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; transition: 0.3s;
+    }
+    .order-btn:hover { background-color: #aaffaa; }
+
+    .notification { position: fixed; top: -60px; left: 50%; transform: translateX(-50%); background: #ffe81f; color: #000; padding: 15px 25px; border-radius: 10px; font-weight: bold; box-shadow: 0 0 10px #ffe81f; transition: top 0.5s ease, opacity 0.5s; opacity: 0; z-index: 999; }
+    .notification.show { top: 20px; opacity: 1; }
+
+    .order-form { display: none; flex-direction: column; margin-top: 10px; }
+    .order-form input { margin-bottom: 10px; padding: 8px; border-radius: 5px; border: none; width: 100%; }
+    .order-form button { background-color: #00ff00; color: #000; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+    .order-form button:hover { background-color: #aaffaa; }
+  </style>
+</head>
+<body>
+  <div class="red-cursor" id="redCursor"></div>
+
+  <header id="home">
+    <h1>🪐 Star Wars Store</h1>
+    <p>Сила завжди з тобою — купуй найкраще з галактики!</p>
+  </header>
+
+  <nav>
+    <a href="#home">Головна</a>
+    <a href="#products">Товари</a>
+    <a href="#about">Про нас</a>
+    <a href="#contacts">Контакти</a>
+  </nav>
+
+  <section class="hero">
+    <h2>Колекційні товари зі всесвіту Star Wars</h2>
+  </section>
+
+  <section class="products" id="products">
+    <!-- Приклади товарів -->
+    <div class="product">
+      <div class="more-btn">⋮</div>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW-yR6zMGU2cXDR9hAOJKNR0qdC2L7NFR0EA&s" />
+      <h3>Світловий меч</h3>
+      <p>Репліка культового меча із саги. Ідеально підходить для фанатів!</p>
+      <div class="details">Матеріал: метал, пластик.<br>Довжина: 100 см.<br>Світіння: червоний колір.</div>
+      <div class="price">2499₴</div>
+      <button class="btn add-to-cart">Додати в кошик</button>
+    </div>
+
+    <div class="product">
+      <div class="more-btn">⋮</div>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_y38XxlV6UB-sU58genYrYSntKRvPN3hiMA&s" />
+      <h3>Шолом Дарта Вейдера</h3>
+      <p>Колекційна модель з LED-підсвіткою. Реалістичний вигляд!</p>
+      <div class="details">Матеріал: ABS пластик.<br>Підсвітка: червоний LED.<br>Розмір: універсальний.</div>
+      <div class="price">3999₴</div>
+      <button class="btn add-to-cart">Додати в кошик</button>
+    </div>
+
+    <div class="product">
+      <div class="more-btn">⋮</div>
+      <img src="https://dzhitoys.com.ua/image/cache/catalog/products/ZVEZDNYE-VOJNY-STAR-WARS/Figurka-Mandalorec-Chernaya-Seriya-Zvezdnye-Vojny-Star-Wars-The-Mandalorian-Hasbro-F1183-4-1400x1000.png" />
+      <h3>Фігурка Мандалорця</h3>
+      <p>Деталізована фігурка головного героя серіалу. Обмежений випуск!</p>
+      <div class="details">Висота: 15 см.<br>Матеріал: PVC.<br>Виробник: Hasbro.</div>
+      <div class="price">1799₴</div>
+      <button class="btn add-to-cart">Додати в кошик</button>
+    </div>
+
+    <!-- ======= ДОДАНІ НОВІ КАРТКИ ======= -->
+
+    <div class="product">
+      <div class="more-btn">⋮</div>
+      <img src="https://www.tradeinn.com/f/14038/140385771_2/hasbro-%D0%A4%D0%B8%D0%B3%D1%83%D1%80%D0%BA%D0%B0-r2-d2-%D0%B8%D0%B7-%D1%81%D0%B5%D1%80%D0%B8%D0%B8--%D0%A7%D1%91%D1%80%D0%BD%D0%B0%D1%8F-%D1%81%D0%B5%D1%80%D0%B8%D1%8F--%D0%97%D0%B2%D0%B5%D0%B7%D0%B4%D0%BD%D1%8B%D0%B5-%D0%B2%D0%BE%D0%B9%D0%BD%D1%8B.webp" />
+      <h3>Дроїд R2-D2</h3>
+      <p>Колекційна фігурка найвідомішого астромеханіка галактики.</p>
+      <div class="details">Висота: 12 см.<br>Матеріал: ABS пластик.<br>Серія: Black Series.</div>
+      <div class="price">2199₴</div>
+      <button class="btn add-to-cart">Додати в кошик</button>
+    </div>
+
+    <div class="product">
+      <div class="more-btn">⋮</div>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoFFk8HNYkhqXKxtFEARPnQYUUz6f3excqMQ&s" />
+      <h3>Штормтрупер — шолом</h3>
+      <p>Легендарний бiлий шолом імперського бійця. Реалістична репліка.</p>
+      <div class="details">Матеріал: композит.<br>Розмір: універсальний.<br>Вага: 900 г.</div>
+      <div class="price">3299₴</div>
+      <button class="btn add-to-cart">Додати в кошик</button>
+    </div>
+
+    <div class="product">
+      <div class="more-btn">⋮</div>
+      <img src="https://myplay.ua/tmp/cache/images/2c/b0e/328815-9jpg-1000x1000-f.webp" />
+      <h3>Грогу (Малюк Йода)</h3>
+      <p>Іграшка героя Мандалорця. Дуже милий!</p>
+      <div class="details">Висота: 20 см.<br>Матеріал: плюш, текстиль.<br>Вага: 250 г.</div>
+      <div class="price">899₴</div>
+      <button class="btn add-to-cart">Додати в кошик</button>
+    </div>
+
+    <div class="product">
+      <div class="more-btn">⋮</div>
+      <img src="https://www.pulsar.ua/files/webp/img_products/full_FIG-KAI-4040.webp" />
+      <h3>Фігурка Енакіна Скайвокера</h3>
+      <p>Деталізована фігурка у стилі "Помста ситхів".</p>
+      <div class="details">Висота: 16 см.<br>Артикуляція: 14 точок.<br>Виробник: Hasbro.</div>
+      <div class="price">1899₴</div>
+      <button class="btn add-to-cart">Додати в кошик</button>
+    </div>
+
+    <div class="product">
+      <div class="more-btn">⋮</div>
+      <img src="https://cdn.shazoo.ru/239189_BHB7okJOD8_star_wars_spaceships_millennium_falcon.jpg" />
+      <h3>Корабель Millennium Falcon</h3>
+      <p>Модель легендарного корабля Гана Соло. Висока деталізація!</p>
+      <div class="details">Довжина: 30 см.<br>Матеріал: пластик.<br>Колір: металевий сірий.</div>
+      <div class="price">4599₴</div>
+      <button class="btn add-to-cart">Додати в кошик</button>
+    </div>
+
+    <div class="product">
+      <div class="more-btn">⋮</div>
+      <img src="https://images.prom.ua/3965847288_w640_h320_figurka-soldat-shturmovik.jpg" />
+      <h3>Штурмовик</h3>
+      <p>Колекційна фігурка елітного загону Війни Клонів.</p>
+      <div class="details">Висота: 14 см.<br>Матеріал: PVC.<br>Комплектація: бластер.</div>
+      <div class="price">1599₴</div>
+      <button class="btn add-to-cart">Додати в кошик</button>
+    </div>
+
+    <!-- ======= КІНЕЦЬ ДОДАНИХ КАРТОК ======= -->
+
+  </section>
+
+  <section id="about">
+    <h2>Про наш магазин</h2>
+    <p><b>Star Wars Store</b> — це портал у далеку-далеку галактику 🌌...</p>
+  </section>
+
+  <div class="cart">🛒 Кошик (<span id="cart-count">0</span>)</div>
+  <div class="cart-window" id="cart-window">
+    <h3>Твій кошик</h3>
+    <div class="cart-items" id="cart-items"></div>
+    <div><b>Загалом:</b> ₴<span id="total-price">0</span></div>
+    <button class="order-btn">Замовити</button>
+    <button class="close-cart">Закрити</button>
+
+    <form class="order-form" id="order-form">
+      <input type="text" id="customer-name" placeholder="Ваше ім'я" required />
+      <input type="tel" id="customer-phone" placeholder="Телефон" required />
+      <input type="email" id="customer-email" placeholder="Email" required />
+      <button type="submit">Підтвердити замовлення</button>
+    </form>
+  </div>
+
+  <div class="notification" id="notification">✅ Додано до кошика!</div>
+
+  <footer id="contacts">
+    <p>Звʼяжись із нами:</p>
+    <a href="https://t.me/your_telegram_username" target="_blank">Telegram</a>
+    <a href="https://www.instagram.com/your_instagram_username" target="_blank">Instagram</a>
+    <p>© 2025 Star Wars Store. Усі права захищені.</p>
+  </footer>
+
+  <script>
+    const cartBtn = document.querySelector(".cart");
+    const cartWindow = document.getElementById("cart-window");
+    const closeCartBtn = document.querySelector(".close-cart");
+    const addButtons = document.querySelectorAll(".add-to-cart");
+    const cartCount = document.getElementById("cart-count");
+    const cartItemsContainer = document.getElementById("cart-items");
+    const totalPriceEl = document.getElementById("total-price");
+    const notification = document.getElementById("notification");
+    const orderBtn = document.querySelector(".order-btn");
+    const orderForm = document.getElementById("order-form");
+    let cart = [];
+
+    addButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const product = btn.closest(".product");
+        const name = product.querySelector("h3").textContent;
+        const price = parseFloat(product.querySelector(".price").textContent);
+        cart.push({ name, price });
+        updateCart();
+        showNotification(`✅ ${name} додано до кошика!`);
+      });
+    });
+
+    cartBtn.addEventListener("click", () => {
+      cartWindow.style.display = cartWindow.style.display === "block" ? "none" : "block";
+    });
+
+    closeCartBtn.addEventListener("click", () => (cartWindow.style.display = "none"));
+
+    function updateCart() {
+      cartCount.textContent = cart.length;
+      cartItemsContainer.innerHTML = "";
+      let total = 0;
+      cart.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.classList.add("cart-item");
+        div.innerHTML = `<span>${item.name}</span><span>₴${item.price} <button class="remove-btn" data-index="${index}">❌</button></span>`;
+        cartItemsContainer.appendChild(div);
+        total += item.price;
+      });
+      totalPriceEl.textContent = total.toFixed(2);
+
+      document.querySelectorAll(".remove-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          const index = e.target.getAttribute("data-index");
+          const removedItem = cart[index];
+          cart.splice(index, 1);
+          updateCart();
+          showNotification(`❌ ${removedItem.name} видалено`);
+        });
+      });
+    }
+
+    function showNotification(message) {
+      notification.textContent = message;
+      notification.classList.add("show");
+      setTimeout(() => notification.classList.remove("show"), 2000);
+    }
+
+    document.querySelectorAll(".more-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const details = btn.parentElement.querySelector(".details");
+        details.classList.toggle("open");
+      });
+    });
+
+    const redCursor = document.getElementById("redCursor");
+    document.addEventListener("mousemove", (e) => {
+      redCursor.style.left = `${e.clientX}px`;
+      redCursor.style.top = `${e.clientY}px`;
+      redCursor.classList.add("active");
+      clearTimeout(redCursor.timeout);
+      redCursor.timeout = setTimeout(() => redCursor.classList.remove("active"), 100);
+    });
+
+    orderBtn.addEventListener("click", () => {
+      if(cart.length === 0){
+        showNotification("⚠️ Кошик порожній!");
+      } else {
+        orderForm.style.display = orderForm.style.display === "flex" ? "none" : "flex";
+      }
+    });
+
+    orderForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("customer-name").value;
+      const phone = document.getElementById("customer-phone").value;
+      const email = document.getElementById("customer-email").value;
+      if(!name || !phone || !email) { showNotification("Заповніть усі поля!"); return; }
+
+      showNotification(`🎉 Дякуємо, ${name}! Замовлення отримано.`);
+      cart = [];
+      updateCart();
+      cartWindow.style.display = "none";
+      orderForm.reset();
+      orderForm.style.display = "none";
+    });
+  </script>
+</body>
+</html>

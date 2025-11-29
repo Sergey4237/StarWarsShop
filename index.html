@@ -3,52 +3,143 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Star Wars Store</title>
+
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap");
 
     html { scroll-behavior: smooth; }
     body { margin: 0; font-family: "Orbitron", sans-serif; background-color: #000; color: #fff; overflow-x: hidden; cursor: none; }
 
+    /* ====== КУРСОР ====== */
     .red-cursor {
-      position: fixed; top: 0; left: 0; width: 25px; height: 25px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,0,0,0.9) 0%, rgba(255,0,0,0.3) 60%, transparent 100%);
-      box-shadow: 0 0 15px rgba(255, 0, 0, 0.8), 0 0 30px rgba(255, 0, 0, 0.6);
-      pointer-events: none; transform: translate(-50%, -50%);
-      transition: transform 0.07s linear, box-shadow 0.3s ease; z-index: 9999;
+      position: fixed !important;
+      top: 0;
+      left: 0;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,0,0,0.9) 0%, rgba(255,0,0,0.3) 60%, transparent 100%) !important;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.8), 0 0 30px rgba(255, 0, 0, 0.6) !important;
+      pointer-events: none !important;
+      transform: translate(-50%, -50%);
+      transition: transform 0.07s linear, box-shadow 0.3s ease;
+      z-index: 999999 !important;
     }
-    .red-cursor.active { box-shadow: 0 0 25px rgba(255,0,0,1), 0 0 45px rgba(255,0,0,0.8); transform: translate(-50%, -50%) scale(1.2); }
+    .red-cursor.active { transform: translate(-50%, -50%) scale(1.2); box-shadow: 0 0 25px red; }
+    
+    #admin-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background: #111;
+  border: 2px solid #ffe81f;
+  padding: 20px;
+  width: 400px;
+  display: none;
+  z-index: 10001;
+  border-radius: 15px;
+  color: #ffe81f;
+  font-family: "Orbitron", sans-serif;
+}
 
-    header { background: linear-gradient(to right, #000, #111, #000); text-align: center; padding: 20px 10px; border-bottom: 2px solid #ffe81f; }
-    header h1 { color: #ffe81f; font-size: 2.5em; letter-spacing: 3px; }
-    nav { background-color: #111; display: flex; justify-content: center; padding: 10px; position: sticky; top: 0; z-index: 100; }
-    nav a { color: #ffe81f; text-decoration: none; margin: 0 15px; transition: 0.3s; }
-    nav a:hover { color: white; }
+#admin-window input {
+  width: 100%;
+  margin: 8px 0;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #333;
+  background: #222;
+  color: #fff;
+}
 
-    .hero { text-align: center; padding: 10px 10px; background: url("YOUR_HERO_IMAGE.jpg") center/cover no-repeat; min-height: 250px; display: flex; align-items: center; justify-content: center; }
-    .hero h2 { background: rgba(0, 0, 0, 0.7); display: inline-block; padding: 15px 30px; color: #ffe81f; font-size: 2em; border-radius: 10px; }
+#admin-window button {
+  background: #ffe81f;
+  color: #000;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 10px;
+  width: 100%;
+  transition: 0.3s;
+}
 
-    .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 40px 20px; }
-    .product { position: relative; background: #111; border: 1px solid #333; border-radius: 10px; text-align: center; padding: 20px; transition: transform 0.3s, box-shadow 0.3s; overflow: hidden; }
-    .product:hover { transform: scale(1.05); box-shadow: 0 0 15px #ffe81f; }
-    .product img { width: 100%; height: 250px; object-fit: cover; border-radius: 10px; background: #222; }
-    .product h3 { color: #ffe81f; margin: 10px 0; }
-    .product p { font-size: 14px; color: #ccc; }
-    .price { font-size: 18px; color: #ffe81f; margin: 10px 0; }
-    .btn { background-color: #ffe81f; color: #000; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-    .btn:hover { background-color: #fff; }
-    .more-btn { position: absolute; top: 10px; right: 15px; font-size: 20px; color: #ffe81f; cursor: pointer; transition: 0.3s; }
-    .more-btn:hover { color: #fff; transform: scale(1.2); }
-    .details { background: rgba(255, 255, 255, 0.05); padding: 0 10px; border-radius: 8px; margin-top: 10px; font-size: 13px; color: #ccc; max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.5s ease, opacity 0.4s ease, padding 0.4s ease; }
-    .details.open { padding: 10px; max-height: 200px; opacity: 1; }
+#admin-window button:hover {
+  background: #fff;
+}
 
-    #about { padding: 50px 20px; background-color: #0a0a0a; text-align: center; border-top: 2px solid #ffe81f; }
-    #about h2 { color: #ffe81f; margin-bottom: 20px; }
-    #about p { max-width: 800px; margin: 0 auto; font-size: 16px; color: #ccc; line-height: 1.6; }
-
+    
+    
     footer { text-align: center; background: #111; padding: 20px; border-top: 2px solid #ffe81f; font-size: 14px; color: #aaa; }
     footer a { color: #ffe81f; text-decoration: none; margin: 0 10px; }
     footer a:hover { text-decoration: underline; }
 
+    /* ===== HEADER ===== */
+    header { background: linear-gradient(to right, #000, #111, #000); text-align: center; padding: 20px 10px; border-bottom: 2px solid #ffe81f; }
+    header h1 { color: #ffe81f; font-size: 2.5em; letter-spacing: 3px; }
+
+    nav { background-color: #111; display: flex; justify-content: center; padding: 10px; position: sticky; top: 0; z-index: 100; }
+    nav a { color: #ffe81f; text-decoration: none; margin: 0 15px; transition: 0.3s; }
+    nav a:hover { color: white; }
+
+    /* HERO */
+    .hero { text-align: center; padding: 40px 10px; background: url("YOUR_HERO_IMAGE.jpg") center/cover no-repeat; min-height: 250px; display: flex; align-items: center; justify-content: center; }
+    .hero h2 { background: rgba(0, 0, 0, 0.7); padding: 15px 30px; color: #ffe81f; font-size: 2em; border-radius: 10px; }
+
+    /* PRODUCTS */
+    .products { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 40px 20px;
+    }
+
+    .product {
+      position: relative;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 10px;
+      text-align: center;
+      padding: 20px;
+      transition: transform 0.3s, box-shadow 0.3s;
+      overflow: hidden;
+      max-height: 430px;
+    }
+
+    .product:hover { transform: scale(1.05); box-shadow: 0 0 15px #ffe81f; }
+
+    .product img { width: 100%; height: 250px; object-fit: cover; border-radius: 10px; background: #222; }
+    .product h3 { color: #ffe81f; margin: 10px 0; }
+    .product p { font-size: 14px; color: #ccc; }
+    .price { font-size: 18px; color: #ffe81f; margin: 10px 0; }
+
+    .btn { background-color: #ffe81f; color: #000; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+    .btn:hover { background-color: #fff; }
+
+    .more-btn { position: absolute; top: 10px; right: 15px; font-size: 20px; color: #ffe81f; cursor: pointer; transition: 0.3s; }
+    .more-btn:hover { color: #fff; transform: scale(1.2); }
+
+    .details {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0 10px;
+      border-radius: 8px;
+      margin-top: 10px;
+      font-size: 13px;
+      color: #ccc;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.5s ease, opacity 0.4s ease, padding 0.4s ease;
+    }
+    .details.open { padding: 10px; max-height: 200px; opacity: 1; }
+
+    /* ABOUT */
+    #about { padding: 50px 20px; background-color: #0a0a0a; text-align: center; border-top: 2px solid #ffe81f; }
+    #about h2 { color: #ffe81f; margin-bottom: 20px; }
+
+    /* CART */
     .cart { position: fixed; right: 20px; bottom: 20px; background: rgba(0,0,0,0.9); border: 2px solid #ffe81f; padding: 15px 20px; border-radius: 10px; box-shadow: 0 0 10px #ffe81f; color: #ffe81f; cursor: pointer; z-index: 10; }
     .cart-window { position: fixed; right: 20px; bottom: 80px; width: 320px; background: #111; border: 2px solid #ffe81f; border-radius: 10px; display: none; padding: 20px; z-index: 11; }
     .cart-window h3 { text-align: center; color: #ffe81f; }
@@ -70,10 +161,49 @@
     .order-form { display: none; flex-direction: column; margin-top: 10px; }
     .order-form input { margin-bottom: 10px; padding: 8px; border-radius: 5px; border: none; width: 100%; }
     .order-form button { background-color: #00ff00; color: #000; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-    .order-form button:hover { background-color: #aaffaa; }
+    .order-form button:hover { background-color: #aaffaa; }.cart { position: fixed; right: 20px; bottom: 20px; background: rgba(0,0,0,0.9); border: 2px solid #ffe81f; padding: 15px 20px; border-radius: 10px; box-shadow: 0 0 10px #ffe81f; color: #ffe81f; cursor: pointer; z-index: 10; }
+    .cart-window { position: fixed; right: 20px; bottom: 80px; width: 320px; background: #111; border: 2px solid #ffe81f; border-radius: 10px; display: none; padding: 20px; z-index: 11; }
+
+    .delete-product-btn {
+      background: #ff4444;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    /* ADMIN */
+    #admin-open-btn {
+      position: fixed; left: 20px; bottom: 20px;
+      background: #ffe81f;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      z-index: 10000;
+      font-weight: bold;
+    }
+
+    #admin-window {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      background: #111;
+      border: 2px solid #ffe81f;
+      padding: 20px;
+      width: 400px;
+      display: none;
+      z-index: 10001;
+      border-radius: 10px;
+    }
+
   </style>
 </head>
+
 <body>
+
   <div class="red-cursor" id="redCursor"></div>
 
   <header id="home">
@@ -92,9 +222,9 @@
     <h2>Колекційні товари зі всесвіту Star Wars</h2>
   </section>
 
+  <!-- =========== ПРАВИЛЬНИЙ ЄДИНИЙ БЛОК ТОВАРІВ =========== -->
   <section class="products" id="products">
-    <!-- Приклади товарів -->
-    <div class="product">
+<div class="product">
       <div class="more-btn">⋮</div>
       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW-yR6zMGU2cXDR9hAOJKNR0qdC2L7NFR0EA&s" />
       <h3>Світловий меч</h3>
@@ -186,9 +316,9 @@
       <button class="btn add-to-cart">Додати в кошик</button>
     </div>
 
-    <!-- ======= КІНЕЦЬ ДОДАНИХ КАРТОК ======= -->
-
   </section>
+
+  <!-- END PRODUCTS -->
 
   <section id="about">
     <h2>Про наш магазин</h2>
@@ -198,7 +328,7 @@
   <div class="cart">🛒 Кошик (<span id="cart-count">0</span>)</div>
   <div class="cart-window" id="cart-window">
     <h3>Твій кошик</h3>
-    <div class="cart-items" id="cart-items"></div>
+    <div id="cart-items"></div>
     <div><b>Загалом:</b> ₴<span id="total-price">0</span></div>
     <button class="order-btn">Замовити</button>
     <button class="close-cart">Закрити</button>
@@ -211,7 +341,6 @@
     </form>
   </div>
 
-  <div class="notification" id="notification">✅ Додано до кошика!</div>
 
   <footer id="contacts">
     <p>Звʼяжись із нами:</p>
@@ -220,104 +349,187 @@
     <p>© 2025 Star Wars Store. Усі права захищені.</p>
   </footer>
 
+
+  <!-- ========== АДМІН ПАНЕЛЬ ========== -->
+  <div id="admin-open-btn">Admin</div>
+
+  <div id="admin-window">
+    <h2>Адмін-панель</h2>
+
+    <div id="admin-login">
+      <input class="admin-input" id="login-user" placeholder="Логін">
+      <input class="admin-input" id="login-pass" type="password" placeholder="Пароль">
+      <button id="admin-login-btn">Увійти</button>
+    </div>
+
+    <div id="admin-panel" style="display:none;">
+      <input class="admin-input" id="new-title" placeholder="Назва товару">
+      <input class="admin-input" id="new-img" placeholder="URL картинки">
+      <input class="admin-input" id="new-desc" placeholder="Опис">
+      <input class="admin-input" id="new-details" placeholder="Деталі (через <br>)">
+      <input class="admin-input" id="new-price" type="number" placeholder="Ціна">
+      <button id="admin-add-btn">Додати товар</button>
+    </div>
+
+    <button id="admin-close">Закрити</button>
+  </div>
+
+  <!-- ========== JS ========== -->
   <script>
-    const cartBtn = document.querySelector(".cart");
-    const cartWindow = document.getElementById("cart-window");
-    const closeCartBtn = document.querySelector(".close-cart");
-    const addButtons = document.querySelectorAll(".add-to-cart");
-    const cartCount = document.getElementById("cart-count");
-    const cartItemsContainer = document.getElementById("cart-items");
-    const totalPriceEl = document.getElementById("total-price");
-    const notification = document.getElementById("notification");
-    const orderBtn = document.querySelector(".order-btn");
-    const orderForm = document.getElementById("order-form");
-    let cart = [];
-
-    addButtons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const product = btn.closest(".product");
-        const name = product.querySelector("h3").textContent;
-        const price = parseFloat(product.querySelector(".price").textContent);
-        cart.push({ name, price });
-        updateCart();
-        showNotification(`✅ ${name} додано до кошика!`);
-      });
-    });
-
-    cartBtn.addEventListener("click", () => {
-      cartWindow.style.display = cartWindow.style.display === "block" ? "none" : "block";
-    });
-
-    closeCartBtn.addEventListener("click", () => (cartWindow.style.display = "none"));
-
-    function updateCart() {
-      cartCount.textContent = cart.length;
-      cartItemsContainer.innerHTML = "";
-      let total = 0;
-      cart.forEach((item, index) => {
-        const div = document.createElement("div");
-        div.classList.add("cart-item");
-        div.innerHTML = `<span>${item.name}</span><span>₴${item.price} <button class="remove-btn" data-index="${index}">❌</button></span>`;
-        cartItemsContainer.appendChild(div);
-        total += item.price;
-      });
-      totalPriceEl.textContent = total.toFixed(2);
-
-      document.querySelectorAll(".remove-btn").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-          const index = e.target.getAttribute("data-index");
-          const removedItem = cart[index];
-          cart.splice(index, 1);
-          updateCart();
-          showNotification(`❌ ${removedItem.name} видалено`);
-        });
-      });
-    }
-
-    function showNotification(message) {
-      notification.textContent = message;
-      notification.classList.add("show");
-      setTimeout(() => notification.classList.remove("show"), 2000);
-    }
-
-    document.querySelectorAll(".more-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const details = btn.parentElement.querySelector(".details");
-        details.classList.toggle("open");
-      });
-    });
-
+    /* ===== КУРСОР ===== */
     const redCursor = document.getElementById("redCursor");
+
     document.addEventListener("mousemove", (e) => {
       redCursor.style.left = `${e.clientX}px`;
       redCursor.style.top = `${e.clientY}px`;
       redCursor.classList.add("active");
+
       clearTimeout(redCursor.timeout);
       redCursor.timeout = setTimeout(() => redCursor.classList.remove("active"), 100);
     });
 
-    orderBtn.addEventListener("click", () => {
-      if(cart.length === 0){
-        showNotification("⚠️ Кошик порожній!");
-      } else {
-        orderForm.style.display = orderForm.style.display === "flex" ? "none" : "flex";
-      }
-    });
+    /* ===== КОШИК ===== */
+    let cart = [];
 
-    orderForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const name = document.getElementById("customer-name").value;
-      const phone = document.getElementById("customer-phone").value;
-      const email = document.getElementById("customer-email").value;
-      if(!name || !phone || !email) { showNotification("Заповніть усі поля!"); return; }
+    function initProductButtons() {
+      document.querySelectorAll(".add-to-cart").forEach(btn => {
+        btn.onclick = () => {
+          const product = btn.closest(".product");
+          const name = product.querySelector("h3").textContent;
+          const price = parseFloat(product.querySelector(".price").textContent);
+          cart.push({ name, price });
+          updateCart();
+        };
+      });
 
-      showNotification(`🎉 Дякуємо, ${name}! Замовлення отримано.`);
-      cart = [];
-      updateCart();
-      cartWindow.style.display = "none";
-      orderForm.reset();
-      orderForm.style.display = "none";
-    });
+      document.querySelectorAll(".delete-product-btn").forEach(btn => {
+        btn.onclick = () => btn.closest(".product").remove();
+      });
+
+      document.querySelectorAll(".more-btn").forEach(btn => {
+        btn.onclick = () => btn.parentElement.querySelector(".details").classList.toggle("open");
+      });
+    }
+    initProductButtons();
+
+    const cartBtn = document.querySelector(".cart");
+    const cartWindow = document.getElementById("cart-window");
+    const cartItems = document.getElementById("cart-items");
+    const cartCount = document.getElementById("cart-count");
+    const totalPriceEl = document.getElementById("total-price");
+
+    cartBtn.onclick = () => cartWindow.style.display = cartWindow.style.display === "block" ? "none" : "block";
+    document.querySelector(".close-cart").onclick = () => cartWindow.style.display = "none";
+
+    function updateCart() {
+      cartItems.innerHTML = "";
+      let total = 0;
+
+      cart.forEach((item, i) => {
+        total += item.price;
+        cartItems.innerHTML += `
+          <div class="cart-item">
+            ${item.name} — ₴${item.price}
+            <button class="remove-btn" data-i="${i}">❌</button>
+          </div>`;
+      });
+      
+      // ===== КНОПКА "ЗАМОВИТИ" =====
+const orderBtn = document.querySelector(".order-btn");
+const orderForm = document.getElementById("order-form");
+
+orderBtn.onclick = () => {
+  orderForm.style.display = orderForm.style.display === "flex" ? "none" : "flex";
+};
+
+// ===== ПОДТВЕРЖДЕНИЕ ЗАКАЗА =====
+orderForm.onsubmit = (e) => {
+  e.preventDefault();
+  const name = document.getElementById("customer-name").value;
+  const phone = document.getElementById("customer-phone").value;
+  const email = document.getElementById("customer-email").value;
+
+  if(name && phone && email) {
+    showNotification(`Дякуємо, ${name}! Ваше замовлення отримано.`);
+    cart = [];
+    updateCart();
+    orderForm.style.display = "none";
+  } else {
+    alert("Будь ласка, заповніть всі поля.");
+  }
+};
+
+// ===== ФУНКЦИЯ УВЕДОМЛЕНИЯ =====
+function showNotification(msg) {
+  let notification = document.createElement("div");
+  notification.className = "notification show";
+  notification.textContent = msg;
+  document.body.appendChild(notification);
+  setTimeout(() => {
+    notification.classList.remove("show");
+    notification.remove();
+  }, 3000);
+}
+
+
+      cartCount.textContent = cart.length;
+      totalPriceEl.textContent = total;
+
+      document.querySelectorAll(".remove-btn").forEach(btn => {
+        btn.onclick = () => {
+          let i = btn.dataset.i;
+          cart.splice(i, 1);
+          updateCart();
+        };
+      });
+    }
+
+    /* ===== ADMIN ===== */
+    const adminBtn = document.getElementById("admin-open-btn");
+    const adminWindow = document.getElementById("admin-window");
+    const adminClose = document.getElementById("admin-close");
+    const adminLogin = document.getElementById("admin-login");
+    const adminPanel = document.getElementById("admin-panel");
+
+    adminBtn.onclick = () => adminWindow.style.display = "block";
+    adminClose.onclick = () => adminWindow.style.display = "none";
+
+    document.getElementById("admin-login-btn").onclick = () => {
+      if (
+        document.getElementById("login-user").value === "admin" &&
+        document.getElementById("login-pass").value === "1234"
+      ) {
+        adminLogin.style.display = "none";
+        adminPanel.style.display = "block";
+      } else alert("Невірний логін або пароль!");
+    };
+
+    document.getElementById("admin-add-btn").onclick = () => {
+      let title = document.getElementById("new-title").value;
+      let img = document.getElementById("new-img").value;
+      let desc = document.getElementById("new-desc").value;
+      let details = document.getElementById("new-details").value;
+      let price = document.getElementById("new-price").value;
+
+      const productHTML = `
+        <div class="product">
+          <div class="more-btn">⋮</div>
+          <img src="${img}">
+          <h3>${title}</h3>
+          <p>${desc}</p>
+          <div class="details">${details}</div>
+          <div class="price">${price}₴</div>
+          <button class="btn add-to-cart">Додати в кошик</button>
+          <button class="delete-product-btn">Видалити</button>
+        </div>
+      `;
+
+      document.querySelector(".products").insertAdjacentHTML("beforeend", productHTML);
+
+      adminWindow.style.display = "none";
+      initProductButtons();
+    };
   </script>
+
 </body>
 </html>

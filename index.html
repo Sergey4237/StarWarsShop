@@ -2,13 +2,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Star Wars Store</title>
+  <title>Star Wars Store — фільтри та анімації</title>
 
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap");
 
+    :root{
+      --accent: #ffe81f;
+      --bg: #000;
+      --card: #0f0f0f;
+      --muted: #aaa;
+    }
+
     html { scroll-behavior: smooth; }
-    body { margin: 0; font-family: "Orbitron", sans-serif; background-color: #000; color: #fff; overflow-x: hidden; cursor: none; }
+    body { margin: 0; font-family: "Orbitron", sans-serif; background-color: var(--bg); color: #fff; overflow-x: hidden; cursor: none; }
+    
+     @keyframes idlePulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 15px rgba(255,0,0,0.6); }
+    50% { transform: scale(1.15); box-shadow: 0 0 25px rgba(255,0,0,0.9); }
+  }
+
+  .idle-cursor {
+    animation: idlePulse 1.2s infinite alternate;
+  }
+
+  @keyframes headerGlow {
+    0%, 100% { text-shadow: 0 0 10px #ffd700, 0 0 20px #ffa500, 0 0 30px #ff8c00; }
+    50% { text-shadow: 0 0 20px #ffe81f, 0 0 40px #ffd700, 0 0 60px #ffb500; }
+  }
+
+  .idle-header {
+    animation: headerGlow 1.8s infinite alternate;
+  }
 
     /* ====== КУРСОР ====== */
     .red-cursor {
@@ -26,182 +51,105 @@
       z-index: 999999 !important;
     }
     .red-cursor.active { transform: translate(-50%, -50%) scale(1.2); box-shadow: 0 0 25px red; }
-    
-    #admin-window {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  background: #111;
-  border: 2px solid #ffe81f;
-  padding: 20px;
-  width: 400px;
-  display: none;
-  z-index: 10001;
-  border-radius: 15px;
-  color: #ffe81f;
-  font-family: "Orbitron", sans-serif;
-}
 
-#admin-window input {
-  width: 100%;
-  margin: 8px 0;
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #333;
-  background: #222;
-  color: #fff;
-}
-
-#admin-window button {
-  background: #ffe81f;
-  color: #000;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  margin-top: 10px;
-  width: 100%;
-  transition: 0.3s;
-}
-
-#admin-window button:hover {
-  background: #fff;
-}
-
-    
-    
-    footer { text-align: center; background: #111; padding: 20px; border-top: 2px solid #ffe81f; font-size: 14px; color: #aaa; }
-    footer a { color: #ffe81f; text-decoration: none; margin: 0 10px; }
-    footer a:hover { text-decoration: underline; }
-
-    /* ===== HEADER ===== */
-    header { background: linear-gradient(to right, #000, #111, #000); text-align: center; padding: 20px 10px; border-bottom: 2px solid #ffe81f; }
-    header h1 { color: #ffe81f; font-size: 2.5em; letter-spacing: 3px; }
+    header { background: linear-gradient(to right, #000, #111, #000); text-align: center; padding: 20px 10px; border-bottom: 2px solid var(--accent); }
+    header h1 {
+            font-size: 40px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffd700;
+            text-shadow: 0 0 10px #ffd700, 0 0 20px #ffa500, 0 0 30px #ff8c00;
+        }
+    header p { margin: 6px 0 0; color: var(--muted); }
 
     nav { background-color: #111; display: flex; justify-content: center; padding: 10px; position: sticky; top: 0; z-index: 100; }
-    nav a { color: #ffe81f; text-decoration: none; margin: 0 15px; transition: 0.3s; }
+    nav a { color: var(--accent); text-decoration: none; margin: 0 15px; transition: 0.3s; }
     nav a:hover { color: white; }
 
-    /* HERO */
-    .hero { text-align: center; padding: 40px 10px; background: url("YOUR_HERO_IMAGE.jpg") center/cover no-repeat; min-height: 250px; display: flex; align-items: center; justify-content: center; }
-    .hero h2 { background: rgba(0, 0, 0, 0.7); padding: 15px 30px; color: #ffe81f; font-size: 2em; border-radius: 10px; }
+    .hero { text-align: center; padding: 30px 10px; min-height: 180px; display: flex; align-items: center; justify-content: center; }
+    .hero h2 { background: rgba(0, 0, 0, 0.7); padding: 12px 20px; color: var(--accent); font-size: 1.6em; border-radius: 10px; }
+
+    /* FILTERS */
+    .filters {
+      display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: center; padding: 18px 12px; background: linear-gradient(180deg,#070707, #0a0a0a);
+      border-bottom: 2px solid var(--accent);
+    }
+    .filters .group { display:flex; gap:8px; align-items:center; }
+    .filters input[type="search"]{ padding:8px 12px; border-radius:8px; border:1px solid #222; background:#111; color:#fff; min-width:200px }
+    .filters select { padding:8px 10px; border-radius:8px; background:#111; border:1px solid #222; color:#fff; }
+    .filters label { color:var(--muted); font-size:14px }
+    .filters .categories { display:flex; gap:8px; flex-wrap:wrap; }
+    .chip { padding:6px 10px; background:#111; border:1px solid #222; border-radius:999px; cursor:pointer; color:var(--muted); }
+    .chip.active { border-color:var(--accent); color:var(--accent); box-shadow:0 0 10px rgba(255,232,31,0.12); }
 
     /* PRODUCTS */
     .products { 
       display: grid; 
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 20px;
-      padding: 40px 20px;
+      padding: 30px 20px 60px;
+      align-items:start;
     }
 
-    .product {
+    .product{
       position: relative;
-      background: #111;
-      border: 1px solid #333;
-      border-radius: 10px;
+      background: var(--card);
+      border: 1px solid #222;
+      border-radius: 12px;
       text-align: center;
-      padding: 20px;
-      transition: transform 0.3s, box-shadow 0.3s;
+      padding: 14px;
       overflow: hidden;
-      max-height: 430px;
+      transform-origin: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s; /* плавний перехід для масштабування картки */
+      will-change: transform, opacity;
+      opacity: 1;
     }
 
-    .product:hover { transform: scale(1.05); box-shadow: 0 0 15px #ffe81f; }
+    .product.fade-in { animation: productIn 450ms ease forwards; }
+    @keyframes productIn { from { transform: translateY(18px) scale(.995); opacity:0 } to { transform: translateY(0) scale(1); opacity:1 }}
 
-    .product img { width: 100%; height: 250px; object-fit: cover; border-radius: 10px; background: #222; }
-    .product h3 { color: #ffe81f; margin: 10px 0; }
-    .product p { font-size: 14px; color: #ccc; }
-    .price { font-size: 18px; color: #ffe81f; margin: 10px 0; }
+    .product.hidden { opacity:0; transform: translateY(12px) scale(.98); pointer-events:none; filter:blur(2px); }
 
-    .btn { background-color: #ffe81f; color: #000; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-    .btn:hover { background-color: #fff; }
+    .product img { width: 100%; height: 200px; object-fit:cover; border-radius:8px; background:#222; transition: transform 0.35s ease; }
 
-    .more-btn { position: absolute; top: 10px; right: 15px; font-size: 20px; color: #ffe81f; cursor: pointer; transition: 0.3s; }
-    .more-btn:hover { color: #fff; transform: scale(1.2); }
-
-    .details {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 0 10px;
-      border-radius: 8px;
-      margin-top: 10px;
-      font-size: 13px;
-      color: #ccc;
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      transition: max-height 0.5s ease, opacity 0.4s ease, padding 0.4s ease;
+    /* ==== ЗБІЛЬШЕННЯ ВСІЄЇ КАРТКИ, а не картинки ==== */
+    .product:hover img { transform: none; } /* видаляємо масштаб картинки */
+    .product:hover { 
+      transform: scale(1.05); /* збільшуємо всю картку */
+      box-shadow: 0 8px 20px rgba(255,232,31,0.3); 
+      z-index: 5; 
     }
-    .details.open { padding: 10px; max-height: 200px; opacity: 1; }
 
-    /* ABOUT */
-    #about { padding: 50px 20px; background-color: #0a0a0a; text-align: center; border-top: 2px solid #ffe81f; }
-    #about h2 { color: #ffe81f; margin-bottom: 20px; }
+    .product h3 { color: var(--accent); margin: 10px 0 6px; font-size:1.05rem }
+    .product p{ font-size:13px; color:#ccc; margin:0 }
+    .price { font-size:18px; color: var(--accent); margin: 10px 0; }
+    .btn { background-color: var(--accent); color: #000; padding: 8px 14px; border: none; border-radius: 6px; font-weight:700; cursor:pointer; transition: transform 180ms; }
+    .btn:active{ transform: scale(.98) }
+
+    .more-btn { position:absolute; top:10px; right:12px; color:var(--accent); cursor:pointer; }
+
+    .details { background: rgba(255,255,255,0.03); padding:0 10px; border-radius:8px; margin-top:10px; font-size:13px; color:#ccc; max-height:0; overflow:hidden; opacity:0; transition: max-height 400ms ease, opacity 300ms ease, padding 300ms; }
+    .details.open { padding:10px; max-height:160px; opacity:1 }
 
     /* CART */
-    .cart { position: fixed; right: 20px; bottom: 20px; background: rgba(0,0,0,0.9); border: 2px solid #ffe81f; padding: 15px 20px; border-radius: 10px; box-shadow: 0 0 10px #ffe81f; color: #ffe81f; cursor: pointer; z-index: 10; }
-    .cart-window { position: fixed; right: 20px; bottom: 80px; width: 320px; background: #111; border: 2px solid #ffe81f; border-radius: 10px; display: none; padding: 20px; z-index: 11; }
-    .cart-window h3 { text-align: center; color: #ffe81f; }
-    .cart-items { max-height: 220px; overflow-y: auto; margin-bottom: 10px; }
-    .cart-item { display: flex; justify-content: space-between; align-items: center; margin: 5px 0; border-bottom: 1px solid #333; padding-bottom: 5px; }
-    .remove-btn { background: none; border: none; color: #ff4444; font-size: 18px; cursor: pointer; margin-left: 8px; transition: 0.3s; }
-    .remove-btn:hover { color: #ff7777; transform: scale(1.2); }
-    .close-cart { background: #ffe81f; color: #000; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
-    .close-cart:hover { background: white; }
+    .cart { position: fixed; right: 20px; bottom: 20px; background: rgba(0,0,0,0.9); border: 2px solid var(--accent); padding: 12px 16px; border-radius: 10px; box-shadow: 0 0 10px var(--accent); color: var(--accent); cursor: pointer; z-index: 10; }
+    .cart-window { position: fixed; right: 20px; bottom: 80px; width: 340px; background: #111; border: 2px solid var(--accent); border-radius: 10px; display: none; padding: 16px; z-index: 11; }
+    .cart-window.show { display:block; animation: cartIn 240ms ease; }
+    @keyframes cartIn { from { transform: translateY(8px) scale(.99); opacity:0 } to { transform: translateY(0) scale(1); opacity:1 }}
 
-    .order-btn {
-      background-color: #00ff00; color: #000; border: none; padding: 10px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; transition: 0.3s;
-    }
-    .order-btn:hover { background-color: #aaffaa; }
+    .notification { position: fixed; top: -60px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #000; padding: 12px 20px; border-radius: 10px; font-weight: bold; box-shadow: 0 0 10px var(--accent); transition: top 0.45s ease, opacity 0.5s; opacity: 0; z-index: 999; }
+    .notification.show { top: 18px; opacity:1 }
 
-    .notification { position: fixed; top: -60px; left: 50%; transform: translateX(-50%); background: #ffe81f; color: #000; padding: 15px 25px; border-radius: 10px; font-weight: bold; box-shadow: 0 0 10px #ffe81f; transition: top 0.5s ease, opacity 0.5s; opacity: 0; z-index: 999; }
-    .notification.show { top: 20px; opacity: 1; }
-
-    .order-form { display: none; flex-direction: column; margin-top: 10px; }
-    .order-form input { margin-bottom: 10px; padding: 8px; border-radius: 5px; border: none; width: 100%; }
-    .order-form button { background-color: #00ff00; color: #000; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-    .order-form button:hover { background-color: #aaffaa; }.cart { position: fixed; right: 20px; bottom: 20px; background: rgba(0,0,0,0.9); border: 2px solid #ffe81f; padding: 15px 20px; border-radius: 10px; box-shadow: 0 0 10px #ffe81f; color: #ffe81f; cursor: pointer; z-index: 10; }
-    .cart-window { position: fixed; right: 20px; bottom: 80px; width: 320px; background: #111; border: 2px solid #ffe81f; border-radius: 10px; display: none; padding: 20px; z-index: 11; }
-
-    .delete-product-btn {
-      background: #ff4444;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 5px;
-    }
+    footer { text-align: center; background: #111; padding: 20px; border-top: 2px solid var(--accent); font-size: 14px; color: var(--muted); }
 
     /* ADMIN */
-    #admin-open-btn {
-      position: fixed; left: 20px; bottom: 20px;
-      background: #ffe81f;
-      padding: 10px 20px;
-      border-radius: 10px;
-      cursor: pointer;
-      z-index: 10000;
-      font-weight: bold;
-    }
+    #admin-open-btn { position: fixed; left: 20px; bottom: 20px; background: var(--accent); padding: 10px 14px; border-radius: 10px; cursor: pointer; z-index: 10000; font-weight:bold }
+    #admin-window { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); background: #111; border: 2px solid var(--accent); padding: 20px; width: 420px; display: none; z-index: 10001; border-radius: 12px; }
 
-    #admin-window {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%,-50%);
-      background: #111;
-      border: 2px solid #ffe81f;
-      padding: 20px;
-      width: 400px;
-      display: none;
-      z-index: 10001;
-      border-radius: 10px;
-    }
-
+    /* responsive tweaks */
+    @media (max-width:600px){ .filters{flex-direction:column; align-items:stretch} .filters .group{justify-content:center} }
   </style>
 </head>
-
 <body>
 
   <div class="red-cursor" id="redCursor"></div>
@@ -222,9 +170,39 @@
     <h2>Колекційні товари зі всесвіту Star Wars</h2>
   </section>
 
-  <!-- =========== ПРАВИЛЬНИЙ ЄДИНИЙ БЛОК ТОВАРІВ =========== -->
+  <!-- FILTERS -->
+  <div class="filters" id="filters">
+    <div class="group">
+      <input type="search" id="search-input" placeholder="Пошук... (наприклад: меч, шолом, грогу)">
+    </div>
+
+    <div class="group">
+      <label for="price-select">Ціна:</label>
+      <select id="price-select">
+        <option value="all">Всі</option>
+        <option value="0-999">до 1000₴</option>
+        <option value="1000-2999">1000–2999₴</option>
+        <option value="3000-999999">3000₴+</option>
+      </select>
+    </div>
+
+    <div class="group categories">
+      <label>Категорії:</label>
+      <div class="chip" data-cat="all">Усі</div>
+      <div class="chip" data-cat="sword">Мечі</div>
+      <div class="chip" data-cat="helmet">Шоломи</div>
+      <div class="chip" data-cat="figure">Фігурки</div>
+      <div class="chip" data-cat="droid">Дроїди</div>
+      <div class="chip" data-cat="ship">Кораблі</div>
+      <div class="chip" data-cat="plush">Плюш</div>
+    </div>
+  </div>
+
+  <!-- PRODUCTS -->
   <section class="products" id="products">
-<div class="product">
+
+    <!-- each .product має data-category і data-price (число) -->
+    <div class="product fade-in" data-category="sword" data-price="2499">
       <div class="more-btn">⋮</div>
       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW-yR6zMGU2cXDR9hAOJKNR0qdC2L7NFR0EA&s" />
       <h3>Світловий меч</h3>
@@ -234,7 +212,7 @@
       <button class="btn add-to-cart">Додати в кошик</button>
     </div>
 
-    <div class="product">
+    <div class="product fade-in" data-category="helmet" data-price="3999">
       <div class="more-btn">⋮</div>
       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_y38XxlV6UB-sU58genYrYSntKRvPN3hiMA&s" />
       <h3>Шолом Дарта Вейдера</h3>
@@ -244,7 +222,7 @@
       <button class="btn add-to-cart">Додати в кошик</button>
     </div>
 
-    <div class="product">
+    <div class="product fade-in" data-category="figure" data-price="1799">
       <div class="more-btn">⋮</div>
       <img src="https://dzhitoys.com.ua/image/cache/catalog/products/ZVEZDNYE-VOJNY-STAR-WARS/Figurka-Mandalorec-Chernaya-Seriya-Zvezdnye-Vojny-Star-Wars-The-Mandalorian-Hasbro-F1183-4-1400x1000.png" />
       <h3>Фігурка Мандалорця</h3>
@@ -254,9 +232,7 @@
       <button class="btn add-to-cart">Додати в кошик</button>
     </div>
 
-    <!-- ======= ДОДАНІ НОВІ КАРТКИ ======= -->
-
-    <div class="product">
+    <div class="product fade-in" data-category="droid" data-price="2199">
       <div class="more-btn">⋮</div>
       <img src="https://www.tradeinn.com/f/14038/140385771_2/hasbro-%D0%A4%D0%B8%D0%B3%D1%83%D1%80%D0%BA%D0%B0-r2-d2-%D0%B8%D0%B7-%D1%81%D0%B5%D1%80%D0%B8%D0%B8--%D0%A7%D1%91%D1%80%D0%BD%D0%B0%D1%8F-%D1%81%D0%B5%D1%80%D0%B8%D1%8F--%D0%97%D0%B2%D0%B5%D0%B7%D0%B4%D0%BD%D1%8B%D0%B5-%D0%B2%D0%BE%D0%B9%D0%BD%D1%8B.webp" />
       <h3>Дроїд R2-D2</h3>
@@ -266,7 +242,7 @@
       <button class="btn add-to-cart">Додати в кошик</button>
     </div>
 
-    <div class="product">
+    <div class="product fade-in" data-category="helmet" data-price="3299">
       <div class="more-btn">⋮</div>
       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoFFk8HNYkhqXKxtFEARPnQYUUz6f3excqMQ&s" />
       <h3>Штормтрупер — шолом</h3>
@@ -276,7 +252,7 @@
       <button class="btn add-to-cart">Додати в кошик</button>
     </div>
 
-    <div class="product">
+    <div class="product fade-in" data-category="plush" data-price="899">
       <div class="more-btn">⋮</div>
       <img src="https://myplay.ua/tmp/cache/images/2c/b0e/328815-9jpg-1000x1000-f.webp" />
       <h3>Грогу (Малюк Йода)</h3>
@@ -286,7 +262,7 @@
       <button class="btn add-to-cart">Додати в кошик</button>
     </div>
 
-    <div class="product">
+    <div class="product fade-in" data-category="figure" data-price="1899">
       <div class="more-btn">⋮</div>
       <img src="https://www.pulsar.ua/files/webp/img_products/full_FIG-KAI-4040.webp" />
       <h3>Фігурка Енакіна Скайвокера</h3>
@@ -296,7 +272,7 @@
       <button class="btn add-to-cart">Додати в кошик</button>
     </div>
 
-    <div class="product">
+    <div class="product fade-in" data-category="ship" data-price="4599">
       <div class="more-btn">⋮</div>
       <img src="https://cdn.shazoo.ru/239189_BHB7okJOD8_star_wars_spaceships_millennium_falcon.jpg" />
       <h3>Корабель Millennium Falcon</h3>
@@ -306,7 +282,7 @@
       <button class="btn add-to-cart">Додати в кошик</button>
     </div>
 
-    <div class="product">
+    <div class="product fade-in" data-category="figure" data-price="1599">
       <div class="more-btn">⋮</div>
       <img src="https://images.prom.ua/3965847288_w640_h320_figurka-soldat-shturmovik.jpg" />
       <h3>Штурмовик</h3>
@@ -318,22 +294,20 @@
 
   </section>
 
-  <!-- END PRODUCTS -->
-
   <section id="about">
-    <h2>Про наш магазин</h2>
-    <p><b>Star Wars Store</b> — це портал у далеку-далеку галактику 🌌...</p>
+    <h2 style="text-align:center;color:var(--accent);margin-top:10px">Про наш магазин</h2>
+    <p style="text-align:center;color:#ccc;max-width:900px;margin:10px auto;padding:0 10px"> <b>Star Wars Store</b> — це портал у далеку-далеку галактику 🌌...</p>
   </section>
 
   <div class="cart">🛒 Кошик (<span id="cart-count">0</span>)</div>
   <div class="cart-window" id="cart-window">
-    <h3>Твій кошик</h3>
-    <div id="cart-items"></div>
-    <div><b>Загалом:</b> ₴<span id="total-price">0</span></div>
-    <button class="order-btn">Замовити</button>
+    <h3 style="text-align:center;color:var(--accent)">Твій кошик</h3>
+    <div id="cart-items" class="cart-items" style="max-height:220px;overflow:auto;margin-bottom:10px"></div>
+    <div style="margin-bottom:8px"><b>Загалом:</b> ₴<span id="total-price">0</span></div>
+    <button class="order-btn" id="order-toggle">Замовити</button>
     <button class="close-cart">Закрити</button>
 
-    <form class="order-form" id="order-form">
+    <form class="order-form" id="order-form" style="display:none;flex-direction:column;margin-top:10px">
       <input type="text" id="customer-name" placeholder="Ваше ім'я" required />
       <input type="tel" id="customer-phone" placeholder="Телефон" required />
       <input type="email" id="customer-email" placeholder="Email" required />
@@ -341,21 +315,9 @@
     </form>
   </div>
 
-
-  <footer id="contacts">
-    <p>Звʼяжись із нами:</p>
-    <a href="https://t.me/your_telegram_username" target="_blank">Telegram</a>
-    <a href="https://www.instagram.com/your_instagram_username" target="_blank">Instagram</a>
-    <p>© 2025 Star Wars Store. Усі права захищені.</p>
-  </footer>
-
-
-  <!-- ========== АДМІН ПАНЕЛЬ ========== -->
   <div id="admin-open-btn">Admin</div>
-
   <div id="admin-window">
-    <h2>Адмін-панель</h2>
-
+    <h2 style="color:var(--accent)">Адмін-панель</h2>
     <div id="admin-login">
       <input class="admin-input" id="login-user" placeholder="Логін">
       <input class="admin-input" id="login-pass" type="password" placeholder="Пароль">
@@ -368,168 +330,275 @@
       <input class="admin-input" id="new-desc" placeholder="Опис">
       <input class="admin-input" id="new-details" placeholder="Деталі (через <br>)">
       <input class="admin-input" id="new-price" type="number" placeholder="Ціна">
+      <select id="new-category"><option value="figure">figure</option><option value="sword">sword</option><option value="helmet">helmet</option><option value="droid">droid</option><option value="ship">ship</option><option value="plush">plush</option></select>
       <button id="admin-add-btn">Додати товар</button>
     </div>
 
     <button id="admin-close">Закрити</button>
   </div>
 
-  <!-- ========== JS ========== -->
-  <script>
-    /* ===== КУРСОР ===== */
-    const redCursor = document.getElementById("redCursor");
+  <footer id="contacts">
+    <p style="margin:6px 0;color:var(--muted)">Звʼяжись із нами:</p>
+    <a href="#" style="color:var(--accent);text-decoration:none;margin:0 10px">Telegram</a>
+    <a href="#" style="color:var(--accent);text-decoration:none;margin:0 10px">Instagram</a>
+    <p style="color:#777;margin-top:8px">© 2025 Star Wars Store. Усі права захищені.</p>
+  </footer>
 
+  <div id="notif-root"></div>
+
+  <script>
+    
+    let idleTimer;
+  const idleDelay = 5000; 
+  const headerEl = document.querySelector('header h1');
+
+  function activateIdleAnimation() {
+    redCursor.classList.add('idle-cursor');
+    headerEl.classList.add('idle-header');
+ 
+    document.querySelectorAll('.product').forEach(p => {
+      p.style.transition = 'transform 0.6s ease, box-shadow 0.6s ease';
+      p.style.transform = 'scale(1.02)';
+      p.style.boxShadow = '0 6px 20px rgba(255,232,31,0.25)';
+    });
+  }
+
+  function deactivateIdleAnimation() {
+    redCursor.classList.remove('idle-cursor');
+    headerEl.classList.remove('idle-header');
+    document.querySelectorAll('.product').forEach(p => {
+      p.style.transform = '';
+      p.style.boxShadow = '';
+    });
+  }
+
+  function resetIdleTimer() {
+    deactivateIdleAnimation();
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(activateIdleAnimation, idleDelay);
+  }
+
+ 
+  ['mousemove','keydown','mousedown','touchstart'].forEach(evt =>
+    document.addEventListener(evt, resetIdleTimer)
+  );
+
+  
+  idleTimer = setTimeout(activateIdleAnimation, idleDelay);
+    
+    
+    const redCursor = document.getElementById("redCursor");
     document.addEventListener("mousemove", (e) => {
       redCursor.style.left = `${e.clientX}px`;
       redCursor.style.top = `${e.clientY}px`;
       redCursor.classList.add("active");
-
       clearTimeout(redCursor.timeout);
       redCursor.timeout = setTimeout(() => redCursor.classList.remove("active"), 100);
     });
 
-    /* ===== КОШИК ===== */
-    let cart = [];
+    /* ======== PRODUCTS & FILTERS ======== */
+    const productsContainer = document.getElementById('products');
+    const products = Array.from(document.querySelectorAll('.product'));
 
-    function initProductButtons() {
-      document.querySelectorAll(".add-to-cart").forEach(btn => {
+    // helper: get numeric price from data-price or .price text
+    function getProductPrice(el){
+      const dp = el.dataset.price;
+      if(dp) return Number(dp);
+      const txt = el.querySelector('.price')?.textContent || '';
+      return Number(txt.replace(/[^0-9]/g,'')) || 0;
+    }
+
+    // FILTER UI
+    const searchInput = document.getElementById('search-input');
+    const priceSelect = document.getElementById('price-select');
+    const chips = Array.from(document.querySelectorAll('.chip'));
+    let activeCats = new Set(['all']);
+
+    // chip behaviour
+    chips.forEach(ch => {
+      ch.addEventListener('click', () => {
+        const cat = ch.dataset.cat;
+        if(cat === 'all'){
+          // toggle 'all' exclusively
+          chips.forEach(c=>c.classList.remove('active'));
+          ch.classList.add('active');
+          activeCats = new Set(['all']);
+        } else {
+          // remove 'all' if any specific selected
+          document.querySelector('.chip[data-cat="all"]').classList.remove('active');
+          ch.classList.toggle('active');
+          // update activeCats
+          const act = chips.filter(x=>x.classList.contains('active') && x.dataset.cat!=='all').map(x=>x.dataset.cat);
+          activeCats = new Set(act.length? act : ['all']);
+        }
+        applyFilters();
+      });
+    });
+    // set default 'all' active
+    document.querySelector('.chip[data-cat="all"]').classList.add('active');
+
+    // search & price events
+    [searchInput, priceSelect].forEach(el=> el.addEventListener('input', applyFilters));
+
+    function applyFilters(){
+      const q = searchInput.value.trim().toLowerCase();
+      const priceVal = priceSelect.value; // e.g. "1000-2999"
+
+      const priceMin = priceVal === 'all' ? 0 : Number(priceVal.split('-')[0]);
+      const priceMax = priceVal === 'all' ? Infinity : Number(priceVal.split('-')[1]);
+
+      products.forEach(prod => {
+        const title = prod.querySelector('h3')?.textContent.toLowerCase() || '';
+        const desc = prod.querySelector('p')?.textContent.toLowerCase() || '';
+        const cat = prod.dataset.category || '';
+        const price = getProductPrice(prod);
+
+        const matchesSearch = q === '' || title.includes(q) || desc.includes(q);
+        const matchesCat = activeCats.has('all') || activeCats.has(cat);
+        const matchesPrice = price >= priceMin && price <= priceMax;
+
+        const show = matchesSearch && matchesCat && matchesPrice;
+        toggleProductVisibility(prod, show);
+      });
+    }
+
+    function toggleProductVisibility(prod, show){
+      if(show){
+        prod.classList.remove('hidden');
+        // ensure display restored if previously display none
+        prod.style.display = '';
+        // re-trigger entrance animation
+        prod.classList.remove('fade-in');
+        void prod.offsetWidth;
+        prod.classList.add('fade-in');
+      } else {
+        // hide with transition
+        prod.classList.add('hidden');
+        // after transition end set display:none to remove from flow
+        setTimeout(()=>{
+          if(prod.classList.contains('hidden')) prod.style.display = 'none';
+        }, 350);
+      }
+    }
+
+    // initial animate on load
+    window.addEventListener('load', ()=>{
+      products.forEach((p,i)=> setTimeout(()=> p.classList.add('fade-in'), i*60));
+    });
+
+    /* ====== CART ====== */
+    let cart = [];
+    const cartBtn = document.querySelector('.cart');
+    const cartWindow = document.getElementById('cart-window');
+    const cartItemsEl = document.getElementById('cart-items');
+    const cartCountEl = document.getElementById('cart-count');
+    const totalPriceEl = document.getElementById('total-price');
+
+    cartBtn.onclick = () => cartWindow.classList.toggle('show');
+    document.querySelector('.close-cart').onclick = () => cartWindow.classList.remove('show');
+
+    function updateCartUI(){
+      cartItemsEl.innerHTML = '';
+      let total = 0;
+      cart.forEach((it,i)=>{
+        total += it.price;
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.style.display = 'flex'; div.style.justifyContent='space-between'; div.style.alignItems='center'; div.style.margin='6px 0';
+        div.innerHTML = `${it.name} — ₴${it.price} <button class="remove-btn" data-i="${i}">❌</button>`;
+        cartItemsEl.appendChild(div);
+      });
+      cartCountEl.textContent = cart.length;
+      totalPriceEl.textContent = total;
+      // attach remove handlers
+      cartItemsEl.querySelectorAll('.remove-btn').forEach(b=> b.onclick = ()=>{ cart.splice(b.dataset.i,1); updateCartUI(); });
+    }
+
+    function showNotification(msg){
+      const n = document.createElement('div'); n.className = 'notification show'; n.textContent = msg; document.body.appendChild(n);
+      setTimeout(()=>{ n.classList.remove('show'); n.remove(); },2600);
+    }
+
+    // attach add-to-cart and other dynamic buttons
+    function initProductButtons(){
+      document.querySelectorAll('.add-to-cart').forEach(btn => {
         btn.onclick = () => {
-          const product = btn.closest(".product");
-          const name = product.querySelector("h3").textContent;
-          const price = parseFloat(product.querySelector(".price").textContent);
-          cart.push({ name, price });
-          updateCart();
+          const product = btn.closest('.product');
+          const name = product.querySelector('h3').textContent;
+          const price = getProductPrice(product);
+          cart.push({name, price});
+          updateCartUI();
+          // little pulse animation on cart
+          cartBtn.animate([{transform:'scale(1)'},{transform:'scale(1.06)'},{transform:'scale(1)'}],{duration:220});
+          showNotification(`Додано: ${name}`);
         };
       });
 
-      document.querySelectorAll(".delete-product-btn").forEach(btn => {
-        btn.onclick = () => btn.closest(".product").remove();
+      document.querySelectorAll('.more-btn').forEach(btn => {
+        btn.onclick = () => btn.parentElement.querySelector('.details').classList.toggle('open');
       });
 
-      document.querySelectorAll(".more-btn").forEach(btn => {
-        btn.onclick = () => btn.parentElement.querySelector(".details").classList.toggle("open");
+      document.querySelectorAll('.delete-product-btn').forEach(btn => {
+        btn.onclick = () => btn.closest('.product').remove();
       });
     }
     initProductButtons();
 
-    const cartBtn = document.querySelector(".cart");
-    const cartWindow = document.getElementById("cart-window");
-    const cartItems = document.getElementById("cart-items");
-    const cartCount = document.getElementById("cart-count");
-    const totalPriceEl = document.getElementById("total-price");
-
-    cartBtn.onclick = () => cartWindow.style.display = cartWindow.style.display === "block" ? "none" : "block";
-    document.querySelector(".close-cart").onclick = () => cartWindow.style.display = "none";
-
-    function updateCart() {
-      cartItems.innerHTML = "";
-      let total = 0;
-
-      cart.forEach((item, i) => {
-        total += item.price;
-        cartItems.innerHTML += `
-          <div class="cart-item">
-            ${item.name} — ₴${item.price}
-            <button class="remove-btn" data-i="${i}">❌</button>
-          </div>`;
-      });
-      
-      // ===== КНОПКА "ЗАМОВИТИ" =====
-const orderBtn = document.querySelector(".order-btn");
-const orderForm = document.getElementById("order-form");
-
-orderBtn.onclick = () => {
-  orderForm.style.display = orderForm.style.display === "flex" ? "none" : "flex";
-};
-
-// ===== ПОДТВЕРЖДЕНИЕ ЗАКАЗА =====
-orderForm.onsubmit = (e) => {
-  e.preventDefault();
-  const name = document.getElementById("customer-name").value;
-  const phone = document.getElementById("customer-phone").value;
-  const email = document.getElementById("customer-email").value;
-
-  if(name && phone && email) {
-    showNotification(`Дякуємо, ${name}! Ваше замовлення отримано.`);
-    cart = [];
-    updateCart();
-    orderForm.style.display = "none";
-  } else {
-    alert("Будь ласка, заповніть всі поля.");
-  }
-};
-
-// ===== ФУНКЦИЯ УВЕДОМЛЕНИЯ =====
-function showNotification(msg) {
-  let notification = document.createElement("div");
-  notification.className = "notification show";
-  notification.textContent = msg;
-  document.body.appendChild(notification);
-  setTimeout(() => {
-    notification.classList.remove("show");
-    notification.remove();
-  }, 3000);
-}
-
-
-      cartCount.textContent = cart.length;
-      totalPriceEl.textContent = total;
-
-      document.querySelectorAll(".remove-btn").forEach(btn => {
-        btn.onclick = () => {
-          let i = btn.dataset.i;
-          cart.splice(i, 1);
-          updateCart();
-        };
-      });
-    }
+    // ORDER form
+    const orderToggle = document.getElementById('order-toggle');
+    const orderForm = document.getElementById('order-form');
+    orderToggle.onclick = ()=> orderForm.style.display = orderForm.style.display === 'flex' ? 'none' : 'flex';
+    orderForm.onsubmit = (e)=>{ e.preventDefault(); const name = document.getElementById('customer-name').value; if(name){ showNotification(`Дякуємо, ${name}! Ваше замовлення отримано.`); cart=[]; updateCartUI(); orderForm.style.display='none'; } else alert('Заповніть дані'); };
 
     /* ===== ADMIN ===== */
-    const adminBtn = document.getElementById("admin-open-btn");
-    const adminWindow = document.getElementById("admin-window");
-    const adminClose = document.getElementById("admin-close");
-    const adminLogin = document.getElementById("admin-login");
-    const adminPanel = document.getElementById("admin-panel");
+    const adminBtn = document.getElementById('admin-open-btn');
+    const adminWindow = document.getElementById('admin-window');
+    const adminClose = document.getElementById('admin-close');
+    const adminLogin = document.getElementById('admin-login');
+    const adminPanel = document.getElementById('admin-panel');
 
-    adminBtn.onclick = () => adminWindow.style.display = "block";
-    adminClose.onclick = () => adminWindow.style.display = "none";
+    adminBtn.onclick = () => adminWindow.style.display = 'block';
+    adminClose.onclick = () => adminWindow.style.display = 'none';
 
-    document.getElementById("admin-login-btn").onclick = () => {
-      if (
-        document.getElementById("login-user").value === "admin" &&
-        document.getElementById("login-pass").value === "1234"
-      ) {
-        adminLogin.style.display = "none";
-        adminPanel.style.display = "block";
-      } else alert("Невірний логін або пароль!");
+    document.getElementById('admin-login-btn').onclick = () => {
+      if(document.getElementById('login-user').value === 'admin' && document.getElementById('login-pass').value === '1234'){
+        adminLogin.style.display = 'none'; adminPanel.style.display = 'block';
+      } else alert('Невірний логін або пароль!');
     };
 
-    document.getElementById("admin-add-btn").onclick = () => {
-      let title = document.getElementById("new-title").value;
-      let img = document.getElementById("new-img").value;
-      let desc = document.getElementById("new-desc").value;
-      let details = document.getElementById("new-details").value;
-      let price = document.getElementById("new-price").value;
+    document.getElementById('admin-add-btn').onclick = () => {
+      const title = document.getElementById('new-title').value || 'Нова позиція';
+      const img = document.getElementById('new-img').value || '';
+      const desc = document.getElementById('new-desc').value || '';
+      const details = document.getElementById('new-details').value || '';
+      const price = Number(document.getElementById('new-price').value) || 0;
+      const category = document.getElementById('new-category').value || 'figure';
 
-      const productHTML = `
-        <div class="product">
-          <div class="more-btn">⋮</div>
-          <img src="${img}">
-          <h3>${title}</h3>
-          <p>${desc}</p>
-          <div class="details">${details}</div>
-          <div class="price">${price}₴</div>
-          <button class="btn add-to-cart">Додати в кошик</button>
-          <button class="delete-product-btn">Видалити</button>
-        </div>
-      `;
+      const wrapper = document.createElement('div');
+      wrapper.className = 'product';
+      wrapper.dataset.category = category;
+      wrapper.dataset.price = price;
+      wrapper.innerHTML = `\n        <div class="more-btn">⋮</div>\n        <img src="${img}">\n        <h3>${title}</h3>\n        <p>${desc}</p>\n        <div class="details">${details}</div>\n        <div class="price">${price}₴</div>\n        <button class="btn add-to-cart">Додати в кошик</button>\n        <button class="delete-product-btn">Видалити</button>\n      `;
 
-      document.querySelector(".products").insertAdjacentHTML("beforeend", productHTML);
-
-      adminWindow.style.display = "none";
+      productsContainer.appendChild(wrapper);
+      // update local products array and init handlers
+      products.push(wrapper);
       initProductButtons();
+      adminWindow.style.display = 'none';
+      showNotification('Товар додано');
     };
-  </script>
 
+    /* ===== accessibility: allow pressing ESC to close admin & cart ===== */
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ adminWindow.style.display='none'; cartWindow.classList.remove('show'); } });
+
+    // small optimization: animate products when entering viewport (optional)
+    try{
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(ent => { if(ent.isIntersecting) ent.target.classList.add('fade-in'); });
+      },{threshold:0.15});
+      document.querySelectorAll('.product').forEach(p=> io.observe(p));
+    }catch(err){/* ignore */}
+
+  </script>
 </body>
 </html>
